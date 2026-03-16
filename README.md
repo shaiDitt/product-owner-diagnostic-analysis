@@ -22,7 +22,8 @@
 * **Base Intermediária:** 60% dos interessados (que não atuam como PO) possuem conhecimento intermediário.
 * **Workshops:** Aparecem em proporção significativa em todas as etapas da jornada.
 * **Senioridade:** POs avançados demonstram procura diferenciada por **liderança e soft skills**.
-![Preview do Dashboard](img/entregável_1.png)
+
+<img src="img/entregável_1.png" width="800" alt="Preview do Dashboard 1">
 
 ---
 
@@ -38,7 +39,8 @@
 | **2. Em Transição** | Conectar teoria à prática | 🟨 Workshops (40%) 🟥 Indiv. (20%) 🟦 Grupo (20%) | Facilitador de aprendizagem |
 | **3. Atua Parcial** | Fortalecer autonomia | 🟨 Workshops (40%) 🟦 Grupo (20%) 🟪 Cases (20%) | Curador e mediador |
 | **4. PO Oficial** | Visão estratégica e impacto | 🟨 Workshops (36%) 🟥 Indiv. (27%) 🟦 Grupo (18%) | Coach estratégico e parceiro |
-![Preview do Dashboard](img/Distribuição_de_necessidades.png)
+
+<img src="img/Distribuição_de_necessidades.png" width="800" alt="Distribuição de Necessidades">
 
 ### 3. Recomendação de Conteúdo
 | Público-Alvo | Foco Principal do Conteúdo | Método Sugerido |
@@ -49,19 +51,45 @@
 
 ---
 
-## C) O que os gráficos mostram
-📊 **1. Score Médio de Conhecimento (KS) por Experiência** O nível de conhecimento aumenta consistentemente com a experiência, indicando um desenvolvimento natural da maturidade técnica e estratégica.
+### **C) O que os gráficos mostram**
 
+### 📊 1. Score Médio de Conhecimento (KS) por tempo de experiência
 
-🧩 **2. Necessidades de Desenvolvimento** As lacunas principais estão em temas estratégicos (Métricas, Estratégia, Roadmap) e Liderança, superando a busca por práticas meramente operacionais.
+- O **nível de conhecimento aumenta consistentemente** com a experiência:
 
-🧠 **3. Preferência de Formato de Apoio** * **Iniciantes:** 62,5% preferem workshops (formação estruturada).
-* **Avançados:** Procura diversificada, com crescimento expressivo em mentoria individual (25%).
-![Preview do Dashboard](img/Entregável_2.png)
+➡️ Indica um **desenvolvimento natural da maturidade técnica e estratégica** com o tempo na função.
 
+### 🧩 2. Distribuição de Necessidades de Desenvolvimento por Trilha
 
-🎯 **4. Status de Atuação** 52% Oficial | 24% Parcial | 12% Transição | 12% Interesse.  
-*Público diretamente alinhado ao objetivo do mentor.*
+- As áreas mais citadas como foco de desenvolvimento foram:
+    1. **Métricas e resultados (OKRs, etc.)**
+    2. **Estratégia e visão de produto**
+    3. **Roadmap e planejamento de portfólio**
+    4. **Liderança e soft skills**
+    5. **Técnicas e ferramentas ágeis**
+        
+        ➡️ Mostra que **as principais lacunas estão em temas estratégicos e de impacto do produto**, mais do que em práticas operacionais.
+        
+
+### 🧠 3. Preferência de Formato de Apoio por Trilha
+
+- Há uma evolução no **tipo de suporte que cada perfil busca**:
+    - **Iniciantes:** 62,5% preferem **workshops**, mostrando necessidade de **formação estruturada e guiada**.
+    - **Intermediários:** 60% ainda preferem workshops, mas 20% já buscam **mentoria de grupo**.
+    - **Avançados:** preferência mais diversificada — **29,2% workshops**, **25% mentoria individual**, **16,7% mentoria de grupo**.
+        
+        ➡️ Mesmo em níveis avançados, **há abertura para aprendizado estruturado**, mas cresce a **demanda por trocas personalizadas e experiências de mentoria**.
+        
+<img src="img/Entregável_2.png" width="800" alt="Preview do Dashboard 2">
+
+### 🎯 4) Status de Atuação como PO
+
+- **52% já atuam oficialmente como PO**,
+- **24% atuam parcialmente**,
+- **12% estão em transição**, e
+- **12% têm apenas interesse na área.**
+    
+    ➡️ Ou seja, existe **um contingente relevante em processo de consolidação e transição** — público diretamente alinhado ao objetivo do mentor.
 
 ---
 
