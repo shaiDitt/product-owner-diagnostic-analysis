@@ -1,0 +1,161 @@
+---
+title: "Análise Diagnóstica da Jornada de Product Owners (PO)"
+author: "Shaini Dittberner"
+date: "2025-11-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## 1 - Preparação do ambiente 
+Carregando as bibliotecas necessárias para análise e visualização:
+```{r}
+library(tidyverse)
+
+```
+
+## 2 - Importação e Visualização Inicial dos Dados
+Uma vez que o separador de campo para o arquivo que estou importante é ";", usa-se a função read_csv2.
+A função read_csv2() é especificamente desenhada para ler arquivos CSV com: ponto e vírgula como delimitador de campos e vírgula como separador decimal.
+**Observação:** Antes da importação, o arquivo CSV foi **editado manualmente em um editor de texto** para remover quebras de linha inconsistentes, garantindo que todas as linhas fossem lidas corretamente.
+```{r}
+#Importando dados
+df_po <- read_csv2("C:/Users/shain/Documents/Yevenb/dewafio_2/desafio2-diagnostico.csv",locale = locale(encoding = "UTF-8"))
+
+
+#Visualizando o meu dataset
+head(df_po)
+
+```
+
+
+## 3 - Limpeza e Padronização dos Dados
+### 3.1 Apagando linhas inconsistentes e colunas desnecessárias
+
+```{r}
+df_po <- df_po %>%
+  slice (-c(17,23, 16, 22), ) %>% 
+  select(-nome, -email, - telefone, -q5_q11, -q12_q17)
+```
+
+### 3.2 Arrumando a linha 35
+A linha 37 tem valores em colunas equivocadas, vamos colocar os valores certo manualmente.
+```{r}
+df_po[35, "knowledge_score"] <- "4.83"
+df_po[35, "trilha"] <- "Avançado"
+df_po[35, c("data_resposta", "created_at")] <- list("2025-10-16 11:21:55.760088+00","2025-10-16 11:21:55.760088+00")
+
+```
+
+
+### 3.3 Correção dos Tipos de Dados das Colunas
+Definindo Tipos de Dados de acordo com os dados que temos usando as.numeric e também a library lubridate. O lubridate usa ymd_hms para converter strings complexas de data e consegue lidar com os microssegundos (.760088) e o fuso horário (+00)
+```{r}
+library(lubridate)
+df_po <- df_po %>% 
+  mutate(
+    knowledge_score = as.numeric(knowledge_score),
+    data_resposta = ymd_hms(data_resposta, tz = "UTC"),
+    created_at = ymd_hms(created_at, tz = "UTC")
+  )
+```
+
+### 3.4 Expandindo coluna em formato de lista
+A coluna "q18_areas_desenvolvimento" possui várias respostas dentro de um vetor entre colchetes. Queremos extrair esses dados de modo que seja possível contabilizar a frequência de cada área de desenvolvimento citada. Para isso vamos remover os colchetes, deixando o formato "item1","item2","item3". Depois vamos usar o separador "," (aspas-vírgula-aspas) para gerar uma linha para cada valor. O novo dataframe para essa extensão vai se chamar df_areas.
+```{r}
+df_areas <-df_po %>% 
+  select(id, q18_areas_desenvolvimento) %>% 
+  mutate(
+    q18_areas_desenvolvimento=q18_areas_desenvolvimento %>% 
+      str_remove_all("\\[|\\]") %>% #Remove colchetes
+      str_trim() #Remove espaços extras
+  ) %>% 
+  separate_rows(q18_areas_desenvolvimento, sep='","') %>% 
+  mutate(
+    q18_areas_desenvolvimento = q18_areas_desenvolvimento %>% 
+      str_remove_all('"') %>%  #Remove aspas literais
+      str_trim()) #Limpa espaços
+
+# O dataframe resultante (df_areas) agora possui uma linha por id e por área de desenvolvimento
+```
+
+
+### 4 - Exportação dos Dados Limpos
+
+Para exportar os dataframes finais (`df_po` e `df_areas`) em formato `.csv`, foi utilizada a função `write_csv()` do pacote **readr**.  
+Optou-se por essa função em vez da base `write.csv()` por alguns motivos:
+
+- **Codificação UTF-8**: evita problemas com acentuação (como “Análise”, “Jornada”, “Desenvolvimento”) no Tableau e em outros softwares.
+- **Maior desempenho**: `write_csv()` é mais rápida e eficiente para grandes volumes de dados.
+- **Sintaxe mais limpa**: não é necessário definir `row.names = FALSE`, pois a função já ignora nomes de linha por padrão.
+
+O código de exportação ficou assim:
+
+```{r}
+write_csv(df_po, "C:/Users/shain/Documents/Yevenb/dewafio_2/analise_po_final.csv")
+write_csv(df_areas, "C:/Users/shain/Documents/Yevenb/dewafio_2/analise_po_areas.csv")
+```
+
+
+## 5 - Resumo dos Processos Realizados
+
+### 🧩 Importação dos Dados
+
+* **Função usada:** `read_delim()`
+
+  * **Motivo:** permite especificar **delimitador de campo** (`;`) e **separador decimal** (`.`) explicitamente.
+  * **Configuração:** `locale(decimal_mark = ".", encoding = "UTF-8")` garante leitura correta de **números decimais** e **caracteres especiais**.
+* **Observação:** Antes da importação, o arquivo CSV foi **corrigido manualmente** para remover quebras de linha inconsistentes, garantindo que todas as linhas sejam lidas corretamente.
+
+### 🧹 Limpeza e Padronização
+
+* **Remoção de colunas irrelevantes:**
+
+  * `select(-nome, -email, -telefone, -q5_q11, -q12_q17)`
+* **Correção de tipos de dados:**
+
+  * `as.numeric()` → converte `knowledge_score` para formato numérico.
+  * `ymd_hms()` (lubridate) → transforma `data_resposta` e `created_at` em formato de **data-hora padrão** (`YYYY-MM-DD HH:MM:SS`), reconhecendo microssegundos e fuso horário (`+00`).
+
+### 🧮 Explosão de Coluna com Múltiplas Respostas
+
+* **Funções usadas:**
+
+  * `str_remove_all()` → remove colchetes e aspas de strings com múltiplos itens.
+  * `separate_rows()` → divide respostas em linhas separadas (`df_areas`).
+* **Resultado:**
+
+  * Permite analisar a **frequência de áreas citadas** e realizar cruzamentos no Tableau.
+
+### 💾 Exportação dos Dados
+
+* **Função usada:** `write_csv()` (readr)
+
+  * Mantém **codificação UTF-8** e é mais rápida/limpa que `write.csv()`.
+  * Arquivos gerados:
+
+    * `analise_po_final.csv` — base principal (`dados_po`).
+    * `analise_po_areas.csv` — base expandida (`df_areas`).
+
+---
+
+## 6 - Resumo das Funções e Sintaxe Utilizadas
+
+| Função             | Pacote    | Descrição                                                               |
+| ------------------ | --------- | ----------------------------------------------------------------------- |
+| `read_delim()`     | readr     | Lê arquivos CSV com delimitador `;` e separador decimal `.`.            |
+| `select()`         | dplyr     | Seleciona ou exclui colunas de um dataframe.                            |
+| `mutate()`         | dplyr     | Cria ou transforma colunas dentro de um dataframe.                      |
+| `as.numeric()`     | Base R    | Converte valores para tipo numérico.                                    |
+| `ymd_hms()`        | lubridate | Converte strings complexas em objetos de data-hora (`POSIXct`).         |
+| `str_remove_all()` | stringr   | Remove padrões de texto com expressões regulares.                       |
+| `separate_rows()`  | tidyr     | Expande listas ou valores separados por delimitadores em várias linhas. |
+| `write_csv()`      | readr     | Exporta dataframes para `.csv` com codificação UTF-8.                   |
+
+---
+
+🧠 **Conclusão:**
+Com os dados limpos, padronizados e exportados, foi possível estruturar um conjunto de bases (`dados_po` e `df_areas`) adequadas para exploração e visualização no Tableau, garantindo integridade e consistência nas análises da Jornada de Product Owners.
